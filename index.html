@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TAYLOR SWIFT API</title>
+
+		<style>
+			@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css);
+			@import url(https://fonts.googleapis.com/css?family=Pacifico&display=swap);
+			body {
+				font-weight: 600;
+			}
+			.container {
+				margin: auto 15%;
+			}
+
+			.content {
+				max-width: 700px;
+				color: #242424;
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+					Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+					"Helvetica Neue", sans-serif;
+			}
+
+			h1,
+			h2,
+			h3 {
+				font-weight: 600;
+				padding-bottom: 0.3em;
+				border-bottom: 1px solid #eaecef;
+			}
+			li {
+				padding-bottom: 0.5em;
+				font-weight: 600;
+			}
+			li > span {
+				text-decoration: underline;
+				color: black;
+				font-weight: 600;
+				
+			}
+			a {
+				text-decoration: underline;
+			
+				font-style: italic;
+				color: black;
+			}
+			.capitalize {
+				text-transform: capitalize;
+				
+			}
+			#lyrics {
+				text-align: center;
+			}
+			#fetch {
+				color: black;
+				font-weight: bold;
+				font-size: larger;
+				
+				font-family:  cursive;
+				font-style: italic;
+			}
+			#quotes {
+				font-size: xx-large;
+			}
+			button {
+				border: none;
+				background: #fff;
+				cursor: pointer;
+			}
+			button > i,
+			#tweet-quote {
+				color: red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="content">
+				<h2>
+					Random  Quote Generator
+					<button class="btn" id="new-quote">
+						<i class="fa fa-refresh"></i>
+					</button>
+				</h2>
+				<div id="fetch">
+					<span id="quotes">"</span>
+					<div id="lyrics">
+						I don't know what I want, so don't ask me / 'Cause I'm
+						still trying to figure it out
+					</div>
+					<span id="quotes">"</span>
+					<p>
+						<span class="capitalize" id="song"
+							>- a place in this world, </span
+						><span class="capitalize" id="album">Taylor Swift</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<script>
+		
+
+var currentUrlElement = document.querySelector('.current-url');
+if (currentUrlElement) {
+    currentUrlElement.textContent = currentUrl;
+}
+function getQuotesJson() {
+    fetch(`${window.location.href}get`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+           
+            onSuccess(data);
+        })
+        .catch((error) => {
+            
+            onError(error);
+        });
+}
+
+
+function onSuccess(jsonReturn) {
+    console.log("Success:", jsonReturn);
+
+    var quoteData = jsonReturn;
+
+    var newquote = quoteData.quote;
+    var song = quoteData.song;
+    var album = quoteData.album;
+    var lyricsElement = document.getElementById("lyrics");
+    var songElement = document.getElementById("song");
+    var albumElement = document.getElementById("album");
+    
+    if (lyricsElement) {
+        lyricsElement.textContent = newquote;
+    }
+    if (songElement) {
+        songElement.textContent = "- " + song + ", ";
+    }
+    if (albumElement) {
+        albumElement.textContent = album;
+    }
+}
+		
+function onError() {
+    console.log("error");
+}
+
+
+document.getElementById("new-quote").addEventListener("click", function() {
+    getQuotesJson();
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    getQuotesJson();
+});
+
+		</script>
+	</body>
+</html>
